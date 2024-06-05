@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halaman Utama</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto px-4">
+    <header class="text-center py-5">
+      <h1 class="text-4xl font-bold text-gray-800">Selamat Datang di FYPMedia</h1>
+      <p class="text-md text-gray-600 mt-2">Platform media Anda untuk berbagi dan menemukan artikel menarik.</p>
+    </header>
+    <nav class="flex justify-center space-x-4 py-4">
+      <a href="/login" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">Login</a>
+      <a href="/signup" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">Sign Up</a>
+      <a href="/dashboard" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">Upload Article</a>
+    </nav>
+    <section id="articles" class="py-5">
+      <h2 class="text-2xl font-semibold text-gray-800">Artikel Terbaru</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <!-- Artikel cards akan di-render di sini -->
+        <div id="articles-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <!-- Artikel cards akan di-render di sini melalui JavaScript -->
+          </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    // Fungsi untuk memuat artikel terbaru dari server
+    function loadArticles() {
+      fetch('/articles')
+        .then(response => response.json())
+        .then(articles => {
+          const articlesContainer = document.getElementById('articles-container');
+          articlesContainer.innerHTML = ''; // Bersihkan container sebelum memuat artikel baru
+          articles.forEach(article => {
+            const articleCard = `
+              <div class="bg-white p-4 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold">${article.title}</h3>
+                <p class="text-sm text-gray-600">${article.content.substring(0, 100)}...</p>
+                <a href="/article/${article._id}" class="text-blue-500 hover:underline">Baca lebih lanjut</a>
+              </div>
+            `;
+            articlesContainer.innerHTML += articleCard;
+          });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Memuat artikel saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', loadArticles);
+  </script>
+</body>
+</html>
